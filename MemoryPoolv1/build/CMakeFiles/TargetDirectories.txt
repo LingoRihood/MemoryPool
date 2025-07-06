@@ -1,0 +1,3 @@
+/home/ubuntu/proj2/MemoryPoolv1/build/CMakeFiles/MemoryPoolv1.dir
+/home/ubuntu/proj2/MemoryPoolv1/build/CMakeFiles/edit_cache.dir
+/home/ubuntu/proj2/MemoryPoolv1/build/CMakeFiles/rebuild_cache.dir
