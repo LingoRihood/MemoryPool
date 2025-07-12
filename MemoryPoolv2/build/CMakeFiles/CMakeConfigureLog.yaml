@@ -529,3 +529,41 @@ events:
       
       
 ...
+
+---
+events:
+  -
+    kind: "try_compile-v1"
+    backtrace:
+      - "/usr/share/cmake-3.28/Modules/Internal/CheckSourceCompiles.cmake:101 (try_compile)"
+      - "/usr/share/cmake-3.28/Modules/CheckCSourceCompiles.cmake:52 (cmake_check_source_compiles)"
+      - "/usr/share/cmake-3.28/Modules/FindThreads.cmake:97 (CHECK_C_SOURCE_COMPILES)"
+      - "/usr/share/cmake-3.28/Modules/FindThreads.cmake:163 (_threads_check_libc)"
+      - "CMakeLists.txt:14 (find_package)"
+    checks:
+      - "Performing Test CMAKE_HAVE_LIBC_PTHREAD"
+    directories:
+      source: "/home/ubuntu/proj2/MemoryPoolv2/build/CMakeFiles/CMakeScratch/TryCompile-eZK2LZ"
+      binary: "/home/ubuntu/proj2/MemoryPoolv2/build/CMakeFiles/CMakeScratch/TryCompile-eZK2LZ"
+    cmakeVariables:
+      CMAKE_C_FLAGS: ""
+      CMAKE_C_FLAGS_DEBUG: "-g"
+      CMAKE_EXE_LINKER_FLAGS: ""
+    buildResult:
+      variable: "CMAKE_HAVE_LIBC_PTHREAD"
+      cached: true
+      stdout: |
+        Change Dir: '/home/ubuntu/proj2/MemoryPoolv2/build/CMakeFiles/CMakeScratch/TryCompile-eZK2LZ'
+        
+        Run Build Command(s): /usr/bin/cmake -E env VERBOSE=1 /usr/bin/gmake -f Makefile cmTC_02bb5/fast
+        /usr/bin/gmake  -f CMakeFiles/cmTC_02bb5.dir/build.make CMakeFiles/cmTC_02bb5.dir/build
+        gmake[1]: Entering directory '/home/ubuntu/proj2/MemoryPoolv2/build/CMakeFiles/CMakeScratch/TryCompile-eZK2LZ'
+        Building C object CMakeFiles/cmTC_02bb5.dir/src.c.o
+        /usr/bin/cc -DCMAKE_HAVE_LIBC_PTHREAD   -o CMakeFiles/cmTC_02bb5.dir/src.c.o -c /home/ubuntu/proj2/MemoryPoolv2/build/CMakeFiles/CMakeScratch/TryCompile-eZK2LZ/src.c
+        Linking C executable cmTC_02bb5
+        /usr/bin/cmake -E cmake_link_script CMakeFiles/cmTC_02bb5.dir/link.txt --verbose=1
+        /usr/bin/cc CMakeFiles/cmTC_02bb5.dir/src.c.o -o cmTC_02bb5 
+        gmake[1]: Leaving directory '/home/ubuntu/proj2/MemoryPoolv2/build/CMakeFiles/CMakeScratch/TryCompile-eZK2LZ'
+        
+      exitCode: 0
+...

@@ -35,6 +35,33 @@ make clean
 ./MemoryPoolTest
 ```
 
+当然，执行MemoryPoolv2会有一些区别
+在项目目录下创建build目录，并进入该目录
+```
+mkdir build && cd build
+```
+执行 cmake 命令
+```
+cmake ..
+```
+执行 make 命令
+```
+make unit_test
+```
+或者
+执行 make 命令
+```
+make perf_test
+```
+删除编译生成的可执行文件：
+```
+make clean
+```
+运行
+```
+./MemoryPoolTest
+```
+
 # MemoryPoolC11 实验结果
 ![alt text](image.png)
 
@@ -42,7 +69,11 @@ make clean
 ![alt text](image-6.png)
 
 # MemoryPoolv2 实验结果
-![alt text](image-7.png)
+![alt text](image-8.png)
+
+![alt text](image-9.png)
+
+![alt text](image-10.png)
 
 上传到github指令
 ```
