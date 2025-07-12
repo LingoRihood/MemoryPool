@@ -41,6 +41,9 @@ make clean
 # MemoryPoolv1 实验结果
 ![alt text](image-6.png)
 
+# MemoryPoolv2 实验结果
+![alt text](image-7.png)
+
 上传到github指令
 ```
 echo "# MemoryPool" >> README.md
