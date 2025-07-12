@@ -80,6 +80,9 @@ make clean
 
 ![alt text](image-12.png)
 
+# 代码量
+![alt text](image-13.png)
+
 上传到github指令
 ```
 echo "# MemoryPool" >> README.md
