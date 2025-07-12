@@ -151,6 +151,14 @@ Slot* MemoryPool::popFreeList() {
         }
 
         // 尝试更新头结点
+        // std::memory_order_acquire：
+        // 确保当前线程在执行此操作之后的所有读取操作不会被重排到此操作之前。这是为了确保你读取到的原子变量的值是正确且同步的。
+
+        // std::memory_order_release：
+        // 确保当前线程在执行此操作之前的所有写入操作不会被重排到此操作之后。这用于确保你对某个共享资源的修改对于其他线程是可见的。
+
+        // std::memory_order_relaxed：
+        // 不保证任何同步，指令可以自由重排，仅保证原子操作的顺序。
         // 原子性地尝试将 freeList_ 从 oldHead 更新为 newHead
         // bool compare_exchange_weak(T& expected, T desired, 
         //                    memory_order success_order,
@@ -161,6 +169,8 @@ Slot* MemoryPool::popFreeList() {
         // 返回true表示CAS成功。
         // success_order	CAS成功时的内存顺序	memory_order_acquire
         // failure_order	CAS失败时的内存顺序	memory_order_relaxed
+        // std::memory_order_acquire：表示如果CAS操作成功，那么所有随后的内存操作（如对freeList_的读取操作）不会被重排到CAS之前。确保你之后读取freeList_时是正确的。
+        // 这就意味着，在CAS操作成功之后，你能获取到newHead的值，并且它之前的所有操作（如读取freeList_的值）都不会被重排。
         if(freeList_.compare_exchange_weak(oldHead, newHead, std::memory_order_acquire, std::memory_order_relaxed)) {
             return oldHead;
         }
