@@ -18,18 +18,18 @@
 // ThreadCache内存不足或超量时，向CentralCache批量获取或归还内存，减少频繁锁竞争
 namespace MemoryPoolv2 {
 // 使用无锁的span信息存储
-struct SpanTracker {
-    // 内存span的起始地址
-    std::atomic<void*> spanAddr{nullptr};
-    // span跨越的内存页数
-    std::atomic<size_t> numPages{0};
-    // 此span内总内存块数
-    std::atomic<size_t> blockCount{0};
-    // 用于追踪spn中还有多少块是空闲的，如果所有块都空闲，则归还span给PageCache
-    // 当前span内可用的内存块数
-    // 当freeCount == blockCount时，表明整个span空闲，可以归还给PageCache
-    std::atomic<size_t> freeCount{0};
-};
+// struct SpanTracker {
+//     // 内存span的起始地址
+//     std::atomic<void*> spanAddr{nullptr};
+//     // span跨越的内存页数
+//     std::atomic<size_t> numPages{0};
+//     // 此span内总内存块数
+//     std::atomic<size_t> blockCount{0};
+//     // 用于追踪spn中还有多少块是空闲的，如果所有块都空闲，则归还span给PageCache
+//     // 当前span内可用的内存块数
+//     // 当freeCount == blockCount时，表明整个span空闲，可以归还给PageCache
+//     std::atomic<size_t> freeCount{0};
+// };
 
 // 中心缓存的作用 是管理多个线程缓存间的内存调度，减少线程间的竞争。
 class CentralCache {
@@ -65,12 +65,12 @@ private:
     // 获取span信息
     // 根据给定的内存块地址快速找到对应的SpanTracker。
     // 一般通过一定的地址映射机制实现快速定位。
-    SpanTracker* getSpanTracker(void* blockAddr);
+    // SpanTracker* getSpanTracker(void* blockAddr);
 
     // 更新span的空闲计数并检查是否可以归还
     // 每次回收或分配内存块时，更新span中剩余的空闲块数量。
     // 当span所有块都空闲时，触发归还span给底层页缓存。
-    void updateSpanFreeCount(SpanTracker* tracker, size_t newFreeBlocks, size_t index);
+    // void updateSpanFreeCount(SpanTracker* tracker, size_t newFreeBlocks, size_t index);
 
 private:
     // 中心缓存的自由链表
@@ -84,7 +84,7 @@ private:
     std::array<std::atomic_flag, FREE_LIST_SIZE> locks_;
 
     // 使用数组存储span信息，避免map的开销
-    std::array<SpanTracker, 1024> spanTrackers_;
+    // std::array<SpanTracker, 1024> spanTrackers_;
     // spanCount_记录当前使用了多少个span。
     std::atomic<size_t> spanCount_{0};
 
