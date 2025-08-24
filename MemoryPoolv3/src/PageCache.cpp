@@ -136,12 +136,13 @@ void* PageCache::systemAlloc(size_t numPages) {
     size_t size = numPages * PAGE_SIZE;
 
     // 使用mmap分配内存
-    // mmap 是一个系统调用，用来映射文件或设备到内存地址空间，但在这里它用于请求匿名内存
+    // mmap 是一个系统调用，用来映射文件或设备到内存地址空间，但在这里它用于请求匿名内存, 即与任何文件无关的内存区域。
+    // nullptr：mmap 的第一个参数是期望映射的内存地址。这里传入 nullptr 表示让操作系统自动选择一个合适的地址。
     // PROT_READ | PROT_WRITE: 第三个参数指定了映射内存的访问权限，这里设置为 可读可写。
     // MAP_PRIVATE | MAP_ANONYMOUS: 
     // MAP_PRIVATE 表示创建的映射是私有的，不会影响到其他进程的内存。
     // MAP_ANONYMOUS 表示分配的内存不与任何文件关联，而是匿名内存，通常用于内存池等场景。
-    // -1: 第五个参数表示没有文件描述符，因为这是匿名映射。
+    // -1: 第五个参数表示没有文件描述符，表示内存映射不与任何文件关联，因为我们是申请匿名内存。
     // 0: 第六个参数通常表示文件的偏移量，但在匿名映射中它没有实际意义。
     void* ptr = mmap(nullptr, size, PROT_READ | PROT_WRITE, MAP_PRIVATE | MAP_ANONYMOUS, -1, 0);
     // 如果 mmap 调用成功，ptr 会返回映射的内存地址。如果失败，ptr 将会是 MAP_FAILED，表示分配内存失败。

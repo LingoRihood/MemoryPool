@@ -12,12 +12,16 @@ using namespace std::chrono;
 
 // 计时器类
 class Timer {
+private:
     high_resolution_clock::time_point start;
 public:
     Timer() : start(high_resolution_clock::now()) {}
 
     double elapsed() {
         auto end = high_resolution_clock::now();
+        // duration_cast<microseconds>(end - start) 将这个时间差转换为微秒（microseconds）。
+        // .count() 用于获取 duration 中表示的时间值，这里返回的是微秒数。
+        // 最后，通过将微秒数除以 1000.0，将其转换为毫秒（因为 1 毫秒 = 1000 微秒）
         return duration_cast<microseconds>(end - start).count() / 1000.0; // 转换为毫秒
     }
 };
