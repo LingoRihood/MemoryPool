@@ -81,6 +81,7 @@ private:
     // std::atomic_flag本质上是最简单、最轻量级的原子类型，它提供了线程安全的原子操作。
     // 当多个线程同时访问同一链表时，用于确保并发安全。
     // 性能远高于传统锁
+    // locks_：这是一个 std::array<std::atomic_flag, FREE_LIST_SIZE> 数组，它用来同步多个线程对 centralFreeList_ 的访问。std::atomic_flag 是一种轻量级的同步机制，当多个线程同时访问同一自由链表时，确保并发安全
     std::array<std::atomic_flag, FREE_LIST_SIZE> locks_;
 
     // 使用数组存储span信息，避免map的开销
