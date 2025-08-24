@@ -52,6 +52,8 @@ void* CentralCache::fetchRange(size_t index, size_t batchNum) {
     void* result = nullptr;
     try {
         // 尝试从中心缓存获取内存块
+        // 在读取时使用松散的内存顺序（relaxed）来优化性能。
+        // 在写入时使用释放内存顺序（release）来确保内存操作的正确顺序和数据一致性。
         result = centralFreeList_[index].load(std::memory_order_relaxed);
 
         if(!result) {
@@ -74,7 +76,11 @@ void* CentralCache::fetchRange(size_t index, size_t batchNum) {
             // 从切割出的内存块中，取出一个返回给调用者（通常是ThreadCache），其他的存入中心缓存。
             // 转换为char*类型，便于后续地址运算（字节级偏移）。
             char* start = static_cast<char*>(result);
-            size_t totalBlocks = (SPAN_PAGES * PageCache::PAGE_SIZE) / size; // 计算总块数
+
+            // 8 * 4096 = 32768 (32KB) / size
+            // 计算总块数
+            size_t totalBlocks = (SPAN_PAGES * PageCache::PAGE_SIZE) / size; 
+
             size_t allocBlocks = std::min(batchNum, totalBlocks); // 实际分配的块数
             
             // 构建返回给ThreadCache的内存块链表
@@ -87,7 +93,7 @@ void* CentralCache::fetchRange(size_t index, size_t batchNum) {
                     *reinterpret_cast<void**>(current) = next;
                 }
                 *reinterpret_cast<void**>(start + (allocBlocks - 1) * size) = nullptr; // 最后一个块指向nullptr
-            }
+            } 
 
             // 构建保留在CentralCache的链表
             if(totalBlocks > allocBlocks) {
@@ -140,6 +146,10 @@ void CentralCache::returnRange(void* start, size_t size, size_t index) {
         return;
     }
 
+    // memory_order_acquire：保证当前线程在获取锁之后的操作，不会被重排到锁之前，即 当前线程能看到锁前线程的所有操作。当锁被获取时，线程会保证 其后面的内存操作 在获取锁之前 不会被重排。这意味着，锁后的所有内存访问（例如修改或读取内存）不会发生乱序，确保我们在锁后能够看到前面的内存操作
+    // 通过 memory_order_acquire，我们确保：
+    // 在当前线程获取锁后，它能看到之前线程对共享内存的修改。
+    // 获取锁的操作是 同步的，也就是获取锁之前的所有操作都能被当前线程看到。这样可以避免 “脏读” 问题，保证当前线程获取锁后，能准确看到前一个持锁线程所做的内存修改。
     while(locks_[index].test_and_set(std::memory_order_acquire)) {
         // 添加线程让步，避免忙等待
         std::this_thread::yield();

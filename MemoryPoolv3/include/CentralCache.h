@@ -52,9 +52,11 @@ private:
     // 相互是还所有原子指针为nullptr
     CentralCache(){
         for(auto& ptr: centralFreeList_) {
+            // std::memory_order_relaxed：表示该操作不需要内存同步，只是执行原子操作来存储 nullptr，并没有特别的顺序要求
             ptr.store(nullptr, std::memory_order_relaxed);
         }
         // 初始化所有锁
+        // clear() 方法将 std::atomic_flag 的值设置为 false，表示该锁处于 未占用 状态。
         for(auto& lock: locks_) {
             lock.clear(std::memory_order_relaxed);
         }
