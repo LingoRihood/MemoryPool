@@ -93,6 +93,7 @@ public:
                 sizePtrs[sizeIndex].push_back({ptr, size});
 
                 // 模拟真实使用：部分立即释放
+                // 在每分配 4 次后，随机释放一些内存。
                 if(i % 4 == 0) {
                     // 随机选择一个大小类别进行释放
                     size_t releaseIndex = rand() % NUM_SIZES;
