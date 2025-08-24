@@ -86,22 +86,22 @@ private:
     // 使用数组存储span信息，避免map的开销
     // std::array<SpanTracker, 1024> spanTrackers_;
     // spanCount_记录当前使用了多少个span。
-    std::atomic<size_t> spanCount_{0};
+    // std::atomic<size_t> spanCount_{0};
 
     // 延迟归还相关的成员变量
     // 作用是实现延迟归还策略，减少频繁调用底层PageCache接口
     // 最大延迟计数
-    static const size_t MAX_DELAY_COUNT = 48;
+    // static const size_t MAX_DELAY_COUNT = 48;
     // 每个大小类的延迟计数
-    std::array<std::atomic<size_t>, FREE_LIST_SIZE> delayCounts_;
+    // std::array<std::atomic<size_t>, FREE_LIST_SIZE> delayCounts_;
     // 上次归还时间
-    std::array<std::chrono::steady_clock::time_point, FREE_LIST_SIZE> lastReturnTimes_;
-    // 延迟间隔
-    static const std::chrono::milliseconds DELAY_INTERVAL;
+    // std::array<std::chrono::steady_clock::time_point, FREE_LIST_SIZE> lastReturnTimes_;
+    // // 延迟间隔
+    // static const std::chrono::milliseconds DELAY_INTERVAL;
 
     // 延迟归还策略的实现
-    bool shouldPerformDelayedReturn(size_t index, size_t currentCount, std::chrono::steady_clock::time_point currentTime);
+    // bool shouldPerformDelayedReturn(size_t index, size_t currentCount, std::chrono::steady_clock::time_point currentTime);
     // 实际执行归还给底层页缓存。
-    void performDelayedReturn(size_t index);
+    // void performDelayedReturn(size_t index);
 };
 }
